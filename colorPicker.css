@@ -1,0 +1,165 @@
+#pickContainer {
+    position: fixed;
+    top: 0px;
+    left: 0px;
+    display: flex;
+    flex-direction: column;
+    align-items: center;
+    justify-content: center;
+    z-index: 4;
+    width: 100vw;
+    height: 100vh;
+    overflow: hidden;
+    position: fixed;
+    text-align: center;
+    color: white;
+    font-family: 'Segoe UI', Tahoma, Geneva, Verdana, sans-serif;
+    background-color: rgba(0, 0, 0, 0.8);
+}
+
+#colorPreviewContainer {
+    display: flex;
+    flex-direction: row;
+    border: solid 2px orangered;
+    border-bottom: none;
+    justify-content: center;
+    align-items: center;
+}
+
+p {
+    margin: 0px;
+}
+
+.no-scroll {
+    overflow: hidden;
+}
+
+#colorSettingsWrapper {
+    display: flex;
+    flex-direction: row;
+    border:none;
+}
+
+#colorPreview {
+    background-image: url(transparent-bg.png);
+}
+
+#colorRect {
+    width: 400px;
+    height: 200px;
+    background: linear-gradient(to top, black, transparent), linear-gradient(to right, white, red), url(transparent-bg.png);
+}
+
+#colorCursor {
+    border: 1px solid black;
+    border-radius: 25px;
+    position: relative;
+    left: 400px;
+    top: 200px;
+    z-index: 5;
+    width: 10px;
+    height: 10px;
+    margin: -5px;
+    pointer-events: none;
+    box-shadow: inset 0 0 0 5px red;
+    background: url(transparent-bg.png);
+}
+
+#colorCopy {
+    display: flex;
+    flex-direction: column;
+    align-items: stretch;
+    justify-content: center;
+}
+
+.colorSystem {
+    margin: 0px;
+    border: solid 2px orangered;
+}
+
+.colorSystem>input {
+    width: 100px;
+    margin: 2.5px;
+}
+
+.colorSystem.grid {
+    display: grid;
+    grid-template-columns: repeat(3, 110px);
+}
+
+.colorSystem.flex {
+    display: flex;
+    flex-direction: column;
+    align-items: center;
+}
+
+#textbox {
+    background-color: #FFF;
+    color: black;
+    margin: 0px;
+    line-height:20px;
+    height:20px;
+    padding:1px;
+    vertical-align:middle;
+    border:1px #888 solid;
+    font-size:9pt;
+}
+
+#textbox input[type="text"] {
+    margin: 0px;
+    height: 100%;
+    padding: 0px;
+    background-color: #FFF;
+}
+
+#hueRange {
+    appearance: none;
+    width: 200px;
+    margin-top: 85px;
+    margin-bottom: 85px;
+    margin-left: -85px;
+    margin-right: -85px;
+    rotate: 90deg;
+    background: linear-gradient(to right,hsl(0,100%,50%),hsl(60,100%,50%),hsl(120,100%,50%),hsl(180,100%,50%),hsl(240,100%,50%),hsl(300,100%,50%),hsl(360,100%,50%))
+}
+
+.colorRange {
+    border: 1px solid;
+    overflow: hidden;
+    width: 105px;
+    appearance: none;
+    border-radius: 25px;
+    background-repeat: no-repeat;
+}
+
+.colorRange::-webkit-slider-runnable-track {
+    width: .5px;
+}
+
+.colorRange::-webkit-slider-thumb {
+    background-color: rebeccapurple;
+}
+
+#rangeR {
+    border-color: red;
+}
+
+#rangeG {
+    border-color: green;
+}
+
+#rangeB {
+    border-color: blue;
+}
+
+#rangeA {
+    border: none;
+}
+
+#randomColor {
+    background: linear-gradient(to right,hsl(0,100%,50%),hsl(60,100%,50%),hsl(120,100%,50%),hsl(180,100%,50%),hsl(240,100%,50%),hsl(300,100%,50%),hsl(360,100%,50%))
+}
+
+.copyColor {
+    margin: 2.5px;
+}

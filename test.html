@@ -1,0 +1,64 @@
+<!DOCTYPE html>
+<html>
+
+<head>
+    <link rel="stylesheet" href="./colorPicker.css">
+    <script src="./colorPicker.js" type="text/javascript"></script>
+</head>
+
+<body>
+    <div id="pickContainer">
+        <div id="mainColorWrapper">
+            <fieldset id="colorPreviewContainer">
+                <legend>Color Preview</legend>
+                <canvas id="colorPreview" width="200" height="200"></canvas>
+                <div id="colorRect">
+                    <div id="colorCursor"></div>
+                </div>
+                <input type="range" class="colorRange" id="hueRange" value="0" min="0" max="360" oninput="changeH(this.value)">
+                <div id="colorCopy">
+                    <button id="copyHSL" class="copyColor" onclick="copy('HSL')">Copy HSL</button>
+                    <button id="copyHSV" class="copyColor" onclick="copy('HSV')">Copy HSV</button>
+                    <button id="copyRGB" class="copyColor" onclick="copy('RGB')">Copy RGB</button>
+                    <button id="copyHEX" class="copyColor" onclick="copy('HEX')">Copy HEX</button>
+                </div>
+            </fieldset>
+            <div id="colorSettingsWrapper">
+                <fieldset class="colorSystem flex">
+                    <legend>HEX</legend>
+                    <span id="textbox">#<input type="text" pattern="[^0-9a-fA-F]" placeholder="000000" id="stringHEX"
+                            maxlength="8" style="border: none; width: 100px;" oninput="changeHEX(this.value)"></span>
+                </fieldset>
+                <fieldset class="colorSystem grid">
+                    <legend>RGB</legend>
+                    <input type="range" id="rangeR" class="colorRange" oninput="changeR(this.value)" max="255"
+                        value="0">
+                    <input type="range" id="rangeG" class="colorRange" oninput="changeG(this.value)" max="255"
+                        value="0">
+                    <input type="range" id="rangeB" class="colorRange" oninput="changeB(this.value)" max="255"
+                        value="0">
+                    <input type="number" id="intR" oninput="changeR(this.value)">
+                    <input type="number" id="intG" oninput="changeG(this.value)">
+                    <input type="number" id="intB" oninput="changeB(this.value)">
+                </fieldset>
+                <fieldset class="colorSystem flex">
+                    <legend>Transparency</legend>
+                    <input type="range" id="rangeA" class="colorRange" oninput="changeA(this.value)" max="1" step="any" min="0"
+                        value="0">
+                    <input type="number" step="any" max="1" min="0" id="floatA" oninput="changeA(this.value)">
+                </fieldset>
+                <fieldset class="colorSystem flex">
+                    <legend>Other Settings</legend>
+                    <button id="randomColor" onclick="randomColor()">Random Color</button>
+                    <div style="display: flex; flex-direction: row; align-items: center;">
+                        <input id="randomA" type="checkbox" oninput="randomizeAlpha = this.checked">
+                        <label for="randomA">Randomize transparency ?</label>
+                    </div>
+                </fieldset>
+            </div>
+        </div>
+
+    </div>
+</body>
+
+</html>
