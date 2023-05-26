@@ -1,0 +1,56 @@
+<div id="colorPickerMainContainer">
+    <div id="mainColorWrapper">
+        <fieldset id="colorPreviewContainer">
+            <legend>Color Preview</legend>
+            <canvas id="colorPreview" width="200" height="200"></canvas>
+            <div id="colorRect">
+                <div id="colorCursor"></div>
+            </div>
+            <input type="range" class="colorRange" id="hueRange" value="0" min="0" max="359">
+            <div id="colorCopy">
+                <button id="copyHSL" class="copyColor">Copy HSL</button>
+                <button id="copyHSV" class="copyColor">Copy HSV</button>
+                <button id="copyRGB" class="copyColor">Copy RGB</button>
+                <button id="copyHEX" class="copyColor">Copy HEX</button>
+            </div>
+        </fieldset>
+        <div id="colorSettingsWrapper">
+            <fieldset class="colorSystem flex">
+                <legend>HEX</legend>
+                <span id="textbox">#<input type="text" pattern="[^0-9a-fA-F]" placeholder="000000" id="stringHEX"
+                        maxlength="8" style="border: none; width: 100px;"></span>
+            </fieldset>
+            <fieldset class="colorSystem grid">
+                <legend>RGB</legend>
+                <input type="range" id="rangeR" class="colorRange" max="255"
+                    value="0">
+                <input type="range" id="rangeG" class="colorRange" max="255"
+                    value="0">
+                <input type="range" id="rangeB" class="colorRange" max="255"
+                    value="0">
+                <input type="number" id="intR">
+                <input type="number" id="intG">
+                <input type="number" id="intB">
+            </fieldset>
+            <fieldset class="colorSystem flex">
+                <legend>Transparency</legend>
+                <input type="range" id="rangeA" class="colorRange" max="1" step="any" min="0"
+                    value="0">
+                <input type="number" step="any" max="1" min="0" id="floatA">
+            </fieldset>
+            <fieldset class="colorSystem flex">
+                <legend>Other Settings</legend>
+                <button id="randomColor">Random Color</button>
+                <div style="display: flex; flex-direction: row; align-items: center;">
+                    <input id="randomA" type="checkbox">
+                    <label for="randomA">Randomize transparency ?</label>
+                </div>
+            </fieldset>
+        </div>
+        <div id="buttonsWrapper">
+            <button id="cancelButton" class="actionButton">Discard Changes</button>
+            <button id="applyButton" class="actionButton">Apply Changes</button>
+        </div>
+    </div>
+
+</div>

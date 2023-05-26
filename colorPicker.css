@@ -1,8 +1,8 @@
-#pickContainer {
+#colorPickerMainContainer {
     position: fixed;
     top: 0px;
     left: 0px;
-    display: flex;
+    display: none;
     flex-direction: column;
     align-items: center;
     justify-content: center;
@@ -45,6 +45,7 @@ p {
 }
 
 #colorRect {
+    cursor:pointer;
     width: 400px;
     height: 200px;
     background: linear-gradient(to top, black, transparent), linear-gradient(to right, white, red), url(transparent-bg.png);
@@ -142,14 +143,17 @@ p {
 
 #rangeR {
     border-color: red;
+    background: linear-gradient(to right, black, red);
 }
 
 #rangeG {
     border-color: green;
+    background: linear-gradient(to right, black, green);
 }
 
 #rangeB {
     border-color: blue;
+    background: linear-gradient(to right, black, blue);
 }
 
 #rangeA {
@@ -162,4 +166,22 @@ p {
 
 .copyColor {
     margin: 2.5px;
+}
+
+#buttonsWrapper {
+    display: flex;
+    flex-direction: row;
+    margin: 10px;
+    align-items: center;
+    justify-content: center;
+}
+
+.actionButton {
+    width: 11rem;
+    margin: 10px;
+    font-size: 1.25rem;
+    background-color: #5F5F5F;
+    box-shadow: none;
+    border: 2px solid orangered;
+    border-radius: 10px;
 }
