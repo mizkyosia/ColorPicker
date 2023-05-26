@@ -1,18 +1,16 @@
 const hexDigits = ['1', '2', '3', '4', '5', '6', '7', '8', '9', 'A', 'B', 'C', 'D', 'E', 'F'];
 
-/**
- * Returns offset of the given Element's `top`, `bottom`, `right` and `left` values compared to the top-left corner of the page (not the viewport)
+/** Returns offset of the given Element's `top`, `bottom`, `right` and `left` values compared to the top-left corner of the page (not the viewport)
  * @param {HTMLElement} e 
  */
-function offset(e) {
+function rect(e) {
     var rect = e.getBoundingClientRect(),
         scrollLeft = window.scrollX || document.documentElement.scrollLeft,
         scrollTop = window.scrollY || document.documentElement.scrollTop;
-    return { top: rect.top + scrollTop, left: rect.left + scrollLeft, right: rect.right + scrollLeft, bottom: rect.bottom + scrollTop }
+    return { top: rect.top + scrollTop, left: rect.left + scrollLeft, right: rect.right + scrollLeft, bottom: rect.bottom + scrollTop, width: rect.right - rect.left, height: rect.bottom - rect.top }
 }
 
-/**
- * Clamps value `v` in interval [`min`,`max`]
+/** Clamps value `v` in interval [`min`,`max`]
  * @param {number} v 
  * @param {number} min 
  * @param {number} max 
@@ -21,13 +19,12 @@ function clamp(v, min, max) {
     return Math.min(max, Math.max(v, min));
 }
 
-/**
- * Outputs random number in range [`min`,`max`]
+/** Outputs random floating number in range [`min`,`max`[
  * @param {number} max 
  * @param {number} min 
  */
 function randomBetween(max, min = 0) {
-    return Math.floor(Math.random() * (max - min)) + min;
+    return Math.random() * (max - min) + min;
 }
 
 class ColorPicker {
@@ -127,7 +124,7 @@ class ColorPicker {
     setPointer(e) {
         if (!colorPicker.selectingColor) return false;
         e.preventDefault();
-        var o = offset(colorPicker.colorRect);
+        var o = rect(colorPicker.colorRect);
         var left = clamp(e.pageX, o.left, o.right) - o.left;
         var top = clamp(e.pageY, o.top, o.bottom) - o.top;
         colorPicker.changeV((200 - top) / 200);
@@ -172,7 +169,7 @@ class ColorPicker {
     /** Sets a random color to the color picker */
     randomColor() {
         let s = '';
-        for (let i = 0; i < (this.randomizeAlpha ? 8 : 6); i++) s += hexDigits[randomBetween(15)];
+        for (let i = 0; i < (this.randomizeAlpha ? 8 : 6); i++) s += hexDigits[Math.floor(randomBetween(15))];
         this.changeHEX(s);
         this.toHSV();
         this.toHEX();
@@ -189,12 +186,12 @@ class ColorPicker {
     
     /** Make the colorPicker visible */
     show() {
-        this.container.style.display = 'flex';
+        this.container.className = 'visible';
     }
     
     /** Hides the colorPicker */
     hide() {
-        this.container.style.display = 'none';
+        this.container.className = 'hidden';
     }
 
     /** Equivalent to clicking the `apply` button of the colorPicker */
