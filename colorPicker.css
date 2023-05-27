@@ -17,11 +17,11 @@
     background-color: rgba(0, 0, 0, 0.8);
 }
 
-#colorPickerMain.visible {
+#colorPickerMainContainer.visible {
     display: flex;
 }
 
-#colorPickerMain.hidden {
+#colorPickerMainContainer.hidden {
     display: none;
 }
 

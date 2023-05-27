@@ -1,0 +1,17 @@
+<!DOCTYPE html>
+<html>
+    <head>
+        <script src="https://cdn.jsdelivr.net/gh/mizkyosia/ColorPicker/colorPicker.js"></script>
+    </head>
+    <body>
+        <div style="display: flex; flex-direction: row; align-items: center; justify-content: center;">
+            <button onclick="colorPicker.show()">Open Color Picker</button>
+            <div id="exampleCanvas" style="width: 100px; height: 100px;"></div>
+            <script type="text/javascript">
+                colorPicker.onApply = () => {
+                    document.getElementById('exampleCanvas').style.backgroundColor = colorPicker.getCSSColor('HEX');
+                }
+            </script>
+        </div>
+    </body>
+</html>

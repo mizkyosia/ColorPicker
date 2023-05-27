@@ -61,11 +61,16 @@ class ColorPicker {
         const xhr = new XMLHttpRequest();
         xhr.open("GET", "/colorPicker.html", true);
         xhr.responseType = "text";
+        var CSS = false;
         xhr.onload = () => {
-            if (xhr.readyState === xhr.DONE) {
-                if (xhr.status === 200) {
+            if (xhr.readyState === xhr.DONE && xhr.status === 200) {
+                if (!CSS) {
                     document.body.innerHTML += xhr.responseText;
-                    document.head.innerHTML += '<link rel="stylesheet" href="https://raw.githubusercontent.com/mizkyosia/ColorPicker/main/colorPicker.css">';
+                    CSS = true;
+                    xhr.open('GET', '/colorPicker.css', true);
+                    xhr.send(null);
+                } else {
+                    document.head.innerHTML += `<style>${xhr.responseText}</style>`;
                     this.start();
                 }
             }
@@ -91,8 +96,8 @@ class ColorPicker {
         this.colorRect = document.getElementById('colorRect');
         this.colorRect.addEventListener('contextmenu', (e) => e.preventDefault())
         this.colorRect.addEventListener('mousedown', (e) => {
-            colorPicker.selectingColor = true;
-            return colorPicker.setPointer(e);
+            this.selectingColor = true;
+            return this.setPointer(e);
         });
         this.rangeR.oninput = (e) => this.changeR(e.target.value);
         this.rangeG.oninput = (e) => this.changeG(e.target.value);
@@ -112,8 +117,8 @@ class ColorPicker {
         document.getElementById('randomColor').onchange = (e) => this.randomColor();
         document.getElementById('cancelButton').onclick = (e) => this.cancel();
         document.getElementById('applyButton').onclick = (e) => this.apply();
-        document.addEventListener('mousemove', this.setPointer);
-        document.addEventListener('mouseup', (e) => colorPicker.selectingColor = false);
+        document.addEventListener('mousemove', (e) => this.setPointer(e));
+        document.addEventListener('mouseup', (e) => this.selectingColor = false);
         this.changeHEX('000000');
         this.drawColor();
     }
@@ -122,32 +127,32 @@ class ColorPicker {
      * @param {MouseEvent} e Pointer translation event
      */
     setPointer(e) {
-        if (!colorPicker.selectingColor) return false;
+        if (!this.selectingColor) return false;
         e.preventDefault();
-        var o = rect(colorPicker.colorRect);
+        var o = rect(this.colorRect);
         var left = clamp(e.pageX, o.left, o.right) - o.left;
         var top = clamp(e.pageY, o.top, o.bottom) - o.top;
-        colorPicker.changeV((200 - top) / 200);
-        colorPicker.changeSv(left / 400, true);
-        colorPicker.fromHSV();
-        colorPicker.toHEX();
-        colorPicker.toHSL();
-        colorPicker.cursor.style.left = `${left}px`;
-        colorPicker.cursor.style.top = `${top}px`;
-        colorPicker.drawColor();
+        this.changeV((200 - top) / 200);
+        this.changeSv(left / 400, true);
+        this.fromHSV();
+        this.toHEX();
+        this.toHSL();
+        this.cursor.style.left = `${left}px`;
+        this.cursor.style.top = `${top}px`;
+        this.drawColor();
         return false;
     }
 
     // Utility methods
-    
+
     /** Returns the currrent color formatted to the given color system, with the alpha channel
      * @param {string} s `HSV` | `HSL` | `RGB` | `HEX`
      */
     colorToText(s) {
         switch (s) {
-            case 'HSV': return `${this.H}°,${Math.round(this.Sv * 100)}%,${Math.round(this.V * 100)}%,${Math.round(this.A*100)}%`;
-            case 'HSL': return `${this.H}°,${Math.round(this.Sl * 100)}%,${Math.round(this.L * 100)}%,${Math.round(this.A*100)}%`;
-            case 'RGB': return `${this.R},${this.G},${this.B},${Math.round(this.A*100)}%`;
+            case 'HSV': return `${this.H}°,${Math.round(this.Sv * 100)}%,${Math.round(this.V * 100)}%,${Math.round(this.A * 100)}%`;
+            case 'HSL': return `${this.H}°,${Math.round(this.Sl * 100)}%,${Math.round(this.L * 100)}%,${Math.round(this.A * 100)}%`;
+            case 'RGB': return `${this.R},${this.G},${this.B},${Math.round(this.A * 100)}%`;
             case 'HEX':
             default: return '#' + this.HEX;
         }
@@ -158,14 +163,14 @@ class ColorPicker {
      * @param {string} s `HSL` | `RGB` | `HEX`
      */
     getCSSColor(s) {
-        switch (s) {
+        switch (s.toUpperCase()) {
             case 'HSL': return `hsla(${this.H},${Math.round(this.Sl * 100)}%,${Math.round(this.L * 100)}%,${this.A})`;
             case 'RGB': return `rgba(${this.R},${this.G},${this.B},${this.A})`;
             case 'HEX':
             default: return '#' + this.HEX;
         }
     }
-    
+
     /** Sets a random color to the color picker */
     randomColor() {
         let s = '';
@@ -174,7 +179,7 @@ class ColorPicker {
         this.toHSV();
         this.toHEX();
     }
-    
+
     /** Draws the color preview and the color cursor */
     drawColor() {
         this.ctx.fillStyle = '#' + this.HEX;
@@ -183,12 +188,12 @@ class ColorPicker {
         this.cursor.style.boxShadow = `inset 0 0 0 5px #${this.HEX}`;
         this.colorRect.style.background = `linear-gradient(to top, rgba(0,0,0,${this.A}), transparent), linear-gradient(to right, rgba(255,255,255,${this.A}), hsla(${this.H},100%,50%,${this.A})), url(transparent-bg.png)`;
     }
-    
+
     /** Make the colorPicker visible */
     show() {
         this.container.className = 'visible';
     }
-    
+
     /** Hides the colorPicker */
     hide() {
         this.container.className = 'hidden';
@@ -255,7 +260,7 @@ class ColorPicker {
         this.colorRect.style.background = `linear-gradient(to top, rgba(0,0,0,${this.A}), transparent), linear-gradient(to right, rgba(255,255,255,${this.A}), hsla(${this.H},100%,50%,${this.A})), url(transparent-bg.png)`;
         this.drawColor();
     }
-    
+
     /** Updates the `G` value for `RGB` notation
      * @param {number} g 
      * @param {boolean} updateColor 
@@ -275,7 +280,7 @@ class ColorPicker {
         this.colorRect.style.background = `linear-gradient(to top, rgba(0,0,0,${this.A}), transparent), linear-gradient(to right, rgba(255,255,255,${this.A}), hsla(${this.H},100%,50%,${this.A})), url(transparent-bg.png)`;
         this.drawColor();
     }
-    
+
     /** Updates the `B` value for `RGB` notation
      * @param {number} b
      * @param {boolean} updateColor 
@@ -295,7 +300,7 @@ class ColorPicker {
         this.colorRect.style.background = `linear-gradient(to top, rgba(0,0,0,${this.A}), transparent), linear-gradient(to right, rgba(255,255,255,${this.A}), hsla(${this.H},100%,50%,${this.A})), url(transparent-bg.png)`;
         this.drawColor();
     }
-    
+
     /** Updates the `A` (transparency) value. Common to all color systems
      * @param {number} a
      * @param {boolean} updateColor 
@@ -315,7 +320,7 @@ class ColorPicker {
         this.colorRect.style.background = `linear-gradient(to top, rgba(0,0,0,${this.A}), transparent), linear-gradient(to right, rgba(255,255,255,${this.A}), hsla(${this.H},100%,50%,${this.A})), url(transparent-bg.png)`;
         this.drawColor();
     }
-    
+
     /** Updates the `H` value for both `HSV` and `HSL` notation
      * @param {number} h
      * @param {boolean} updateColor
@@ -333,7 +338,7 @@ class ColorPicker {
         this.colorRect.style.background = `linear-gradient(to top, rgba(0,0,0,${this.A}), transparent), linear-gradient(to right, rgba(255,255,255,${this.A}), hsla(${this.H},100%,50%,${this.A})), url(transparent-bg.png)`;
         this.drawColor();
     }
-    
+
     /** Updates the `S` value for `HSV` notation (not the same as `HSL` notation)
      * @param {number} s
      * @param {boolean} updateColor
@@ -346,7 +351,7 @@ class ColorPicker {
         this.toHSL();
         this.drawColor();
     }
-    
+
     /** Updates the `V` value for `HSV` notation
      * @param {number} v
      * @param {boolean} updateColor
@@ -359,7 +364,7 @@ class ColorPicker {
         this.toHSL();
         this.drawColor();
     }
-    
+
     /** Updates the `S` value for `HSL` notation (not the same as `HSV` notation)
      * @param {number} s
      * @param {boolean} updateColor
@@ -372,7 +377,7 @@ class ColorPicker {
         this.toHEX();
         this.drawColor();
     }
-    
+
     /** Updates the `L` value for `HSL` notation
      * @param {number} l
      * @param {boolean} updateColor
@@ -387,7 +392,7 @@ class ColorPicker {
     }
 
     // Color conversion methods
-    
+
     /** Changes `RGB` values by parsing `HEX` value */
     fromHEX() {
         if (this.HEX.length == 6 || this.HEX.length == 8) {
@@ -405,7 +410,7 @@ class ColorPicker {
         }
         return false;
     }
-    
+
     /** Changes `HEX` value by parsing `RGB` values */
     toHEX() {
         var r = this.R.toString(16).toUpperCase();
@@ -422,7 +427,7 @@ class ColorPicker {
         }
         this.changeHEX(this.HEX);
     }
-    
+
     /** Changes `RGB` values by parsing `HSV` values */
     fromHSV() {
         let hi = Math.floor(this.H / 60) % 6, f = this.H / 60 - hi, p = this.V * (1 - this.Sv), q = this.V * (1 - f * this.Sv), t = this.V * (1 - (1 - f) * this.Sv), r, g, b;
@@ -436,7 +441,7 @@ class ColorPicker {
         this.changeG(Math.round(255 * g), false);
         this.changeB(Math.round(255 * b), false);
     }
-    
+
     /** Changes `HSV` values by parsing `RGB` values */
     toHSV() {
         let max = Math.max(this.R, this.G, this.B), min = Math.min(this.R, this.G, this.B);
@@ -468,7 +473,7 @@ class ColorPicker {
         this.changeG(Math.round(255 * g), false);
         this.changeB(Math.round(255 * b), false);
     }
-    
+
     /** Changes `HSL` values by parsing `RGB` values */
     toHSL() {
         let max = Math.max(this.R, this.G, this.B), min = Math.min(this.R, this.G, this.B);
@@ -488,7 +493,7 @@ class ColorPicker {
      *      //code here
      * }
      */
-    onApply(callback){
+    onApply(callback) {
         this._applyCallback = callback;
     }
 
@@ -496,9 +501,7 @@ class ColorPicker {
     /** Event fired when the colorPicker's `cancel` button has been clicked and its color has been reverted back to its previous state
      * @example colorPicker.onCancel = someFunction;
      */
-    onCancel(callback){
+    onCancel(callback) {
         this._cancelCallback = callback;
     }
 }
-
-const colorPicker = new ColorPicker();

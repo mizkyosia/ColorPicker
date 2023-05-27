@@ -8,7 +8,7 @@ Full HEX, RGB, HSL and HSV support
 To use this color picker, just include the following line in your html document :
 
 ```html
-    <script src="https://raw.githubusercontent.com/mizkyosia/ColorPicker/main/colorPicker.css" type="text/javascript"></script>
+    <script src="https://cdn.jsdelivr.net/gh/mizkyosia/ColorPicker/colorPicker.js"></script>
 ```
 
 Then, the script will add the necessary HTML Elements and styling for the picker to properly work. A `colorPicker` variable will be created as the color picker, and will be accessible from any JS script included in the page.
