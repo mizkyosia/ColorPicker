@@ -1,0 +1,61 @@
+<!DOCTYPE html>
+<html>
+
+<head>
+    <script src="https://mizkyosia.github.io/ColorPicker/colorPicker.js"></script>
+    <link rel="stylesheet" href="https://mizkyosia.github.io/main.css">
+    <title>Web Color Picker</title>
+</head>
+
+<body style="text-align: center;">
+    <h1>Web Color Picker</h1>
+    <h2>Because the HTML base one sucks ass</h2>
+    <p>This is a web page showing an example of how exactly this ColorPicker works. Just a simple colored square, and
+        you can pick it's color. The text under it will also change depending on the event fired</p>
+    <div
+        style="display: flex; flex-direction: column; align-items: center; justify-content: center; border: 3px solid orangered; padding: 10px; margin: 10px;border-radius: 15px;">
+        <button class="classic" onclick="colorPicker.show()">Open Color Picker</button>
+        <div id="exampleCanvas" style="width: 100px; height: 100px;"></div>
+        <p id="text"></p>
+        <script type="text/javascript">
+            const colorPicker = new ColorPicker();
+            colorPicker.onApply = () => {
+                document.getElementById('text').textContent = 'Color Applied : ' + colorPicker.getCSSColor('HEX');
+            }
+
+            colorPicker.onUpdate = () => {
+                document.getElementById('text').textContent = 'Color Updated : ' + colorPicker.getCSSColor('HEX');
+                document.getElementById('exampleCanvas').style.backgroundColor = colorPicker.getCSSColor('HEX');
+            }
+
+            colorPicker.onCancel = () => {
+                document.getElementById('exampleCanvas').style.backgroundColor = 'black';
+                document.getElementById('text').textContent = 'Color Cancelled';
+            }
+        </script>
+    </div>
+    <h2>Code used in this demo :</h2>
+    <p>HTML :</p>
+    <code>
+<span class="ht">&lt;script </span><span class="ha">src=</span><span class="s">"https://mizkyosia.github.io/colorPicker.js"</span><span class="ht">&gt;&lt;/span&gt;</span>
+    </code>
+    <p>JavaScript :</p>
+    <code>
+<span class="kw">const </span><span class="v">colorPicker </span><span class="o">= new </span><span class="c">ColorPicker</span>();<br>
+<span class="v">colorPicker</span>.<span class="f">onApply</span> <span class="o">=</span> () <span class="kw">=></span> {<br>
+    <span class="gv">document</span>.<span class="f">getElementById</span>(<span class="s">'text'</span>).<span class="p">textContent</span> <span class="o">=</span> <span class="s">'Color Applied : '</span> <span class="o">+</span> <span class="v">colorPicker</span>.<span class="f">getCSSColor</span>(<span class="s">'HEX'</span>);<br>
+}<br>
+<br>
+<span class="v">colorPicker</span>.<span class="f">onUpdate</span> <span class="o">=</span> () <span class="kw">=></span> {<br>
+    <span class="gv">document</span>.<span class="f">getElementById</span>(<span class="s">'text'</span>).<span class="p">textContent</span> <span class="o">=</span> <span class="s">'Color Applied : '</span> <span class="o">+</span> <span class="v">colorPicker</span>.<span class="f">getCSSColor</span>(<span class="s">'HEX'</span>);<br>
+    <span class="gv">document</span>.<span class="f">getElementById</span>(<span class="s">'exampleCanvas'</span>).<span class="p">style</span>.<span class="p">backgroundColor</span> <span class="o">=</span> <span class="v">colorPicker</span>.<span class="f">getCSSColor</span>(<span class="s">'HEX'</span>);<br>
+}<br>
+<br>
+<span class="v">colorPicker</span>.<span class="f">onCancel</span> <span class="o">=</span> () <span class="kw">=></span> {<br>
+    <span class="gv">document</span>.<span class="f">getElementById</span>(<span class="s">'exampleCanvas'</span>).<span class="p">style</span>.<span class="p">backgroundColor</span> <span class="o">=</span> <span class="s">'black'</span>;<br>
+    <span class="gv">document</span>.<span class="f">getElementById</span>(<span class="s">'text'</span>).<span class="p">textContent</span> <span class="o">=</span> <span class="s">'Color Cancelled'</span>;<br>
+}
+    </code>
+</body>
+
+</html>

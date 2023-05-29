@@ -1,4 +1,5 @@
 const hexDigits = ['1', '2', '3', '4', '5', '6', '7', '8', '9', 'A', 'B', 'C', 'D', 'E', 'F'];
+document.head.innerHTML += '<link rel="stylesheet" href="https://mizkyosia.github.io/ColorPicker/colorPicker.css">';
 
 /** Returns offset of the given Element's `top`, `bottom`, `right` and `left` values compared to the top-left corner of the page (not the viewport)
  * @param {HTMLElement} e 
@@ -41,6 +42,7 @@ class ColorPicker {
     cursor;
 
     // Values properties
+    ID = 0;
     randomizeAlpha;
     selectingColor = false;
     HEX = '';
@@ -57,22 +59,14 @@ class ColorPicker {
     lastHEXColor = '000000';
 
     constructor() {
-        if (document.getElementById('colorPickerMainContainer')) return console.log('Request aborted : color picker already present in document');
+        while (document.getElementById(`colorPickerMainContainer${0}`)) this.ID++;
         const xhr = new XMLHttpRequest();
         xhr.open("GET", "/colorPicker.html", true);
         xhr.responseType = "text";
-        var CSS = false;
         xhr.onload = () => {
             if (xhr.readyState === xhr.DONE && xhr.status === 200) {
-                if (!CSS) {
-                    document.body.innerHTML += xhr.responseText;
-                    CSS = true;
-                    xhr.open('GET', '/colorPicker.css', true);
-                    xhr.send(null);
-                } else {
-                    document.head.innerHTML += `<style>${xhr.responseText}</style>`;
-                    this.start();
-                }
+                document.body.innerHTML += xhr.responseText.replace(/ID/g, this.ID);
+                this.start();
             }
         };
         xhr.onabort = () => console.log('aborted');
@@ -84,16 +78,16 @@ class ColorPicker {
     // Methods
     /** Inits the ColorPicker. Only useful when it is constructed */
     start() {
-        this.container = document.getElementById('colorPickerMainContainer')
-        this.rangeR = document.getElementById('rangeR');
-        this.rangeG = document.getElementById('rangeG');
-        this.rangeB = document.getElementById('rangeB');
-        this.rangeA = document.getElementById('rangeA');
-        this.rangeH = document.getElementById('hueRange');
-        this.stringHEX = document.getElementById('stringHEX');
-        this.cursor = document.getElementById('colorCursor');
-        this.ctx = document.getElementById('colorPreview').getContext('2d');
-        this.colorRect = document.getElementById('colorRect');
+        this.container = document.getElementById(`colorPickerMainContainer${this.ID}`);
+        this.rangeR = this.container.querySelector('#rangeR');
+        this.rangeG = this.container.querySelector('#rangeG');
+        this.rangeB = this.container.querySelector('#rangeB');
+        this.rangeA = this.container.querySelector('#rangeA');
+        this.rangeH = this.container.querySelector('#hueRange');
+        this.stringHEX = this.container.querySelector('#stringHEX');
+        this.cursor = this.container.querySelector('#colorCursor');
+        this.ctx = this.container.querySelector('#colorPreview').getContext('2d');
+        this.colorRect = this.container.querySelector('#colorRect');
         this.colorRect.addEventListener('contextmenu', (e) => e.preventDefault())
         this.colorRect.addEventListener('mousedown', (e) => {
             this.selectingColor = true;
@@ -105,18 +99,18 @@ class ColorPicker {
         this.rangeA.oninput = (e) => this.changeA(e.target.value);
         this.rangeH.oninput = (e) => this.changeH(e.target.value);
         this.stringHEX.oninput = (e) => this.changeHEX(e.target.value);
-        document.getElementById('copyHSL').onclick = navigator.clipboard.writeText(this.colorToText('HSL'));
-        document.getElementById('copyHSV').onclick = navigator.clipboard.writeText(this.colorToText('HSV'));
-        document.getElementById('copyHEX').onclick = navigator.clipboard.writeText(this.colorToText('HEX'));
-        document.getElementById('copyRGB').onclick = navigator.clipboard.writeText(this.colorToText('RGB'));
-        document.getElementById('intR').oninput = (e) => this.changeR(e.target.value);
-        document.getElementById('intG').oninput = (e) => this.changeG(e.target.value);
-        document.getElementById('intB').oninput = (e) => this.changeB(e.target.value);
-        document.getElementById('floatA').oninput = (e) => this.changeA(e.target.value);
-        document.getElementById('randomA').onclick = (e) => this.randomizeAlpha = e.target.checked;
-        document.getElementById('randomColor').onchange = (e) => this.randomColor();
-        document.getElementById('cancelButton').onclick = (e) => this.cancel();
-        document.getElementById('applyButton').onclick = (e) => this.apply();
+        this.container.querySelector('#copyHSL').onclick = navigator.clipboard.writeText(this.colorToText('HSL'));
+        this.container.querySelector('#copyHSV').onclick = navigator.clipboard.writeText(this.colorToText('HSV'));
+        this.container.querySelector('#copyHEX').onclick = navigator.clipboard.writeText(this.colorToText('HEX'));
+        this.container.querySelector('#copyRGB').onclick = navigator.clipboard.writeText(this.colorToText('RGB'));
+        this.container.querySelector('#intR').oninput = (e) => this.changeR(e.target.value);
+        this.container.querySelector('#intG').oninput = (e) => this.changeG(e.target.value);
+        this.container.querySelector('#intB').oninput = (e) => this.changeB(e.target.value);
+        this.container.querySelector('#floatA').oninput = (e) => this.changeA(e.target.value);
+        this.container.querySelector('#randomA').onclick = (e) => this.randomizeAlpha = e.target.checked;
+        this.container.querySelector('#randomColor').onchange = (e) => this.randomColor();
+        this.container.querySelector('#cancelButton').onclick = (e) => this.cancel();
+        this.container.querySelector('#applyButton').onclick = (e) => this.apply();
         document.addEventListener('mousemove', (e) => this.setPointer(e));
         document.addEventListener('mouseup', (e) => this.selectingColor = false);
         this.changeHEX('000000');
@@ -132,8 +126,8 @@ class ColorPicker {
         var o = rect(this.colorRect);
         var left = clamp(e.pageX, o.left, o.right) - o.left;
         var top = clamp(e.pageY, o.top, o.bottom) - o.top;
-        this.changeV((200 - top) / 200);
-        this.changeSv(left / 400, true);
+        this.changeV((o.height - top) / o.height);
+        this.changeSv(left / o.width, true);
         this.fromHSV();
         this.toHEX();
         this.toHSL();
@@ -191,12 +185,12 @@ class ColorPicker {
 
     /** Make the colorPicker visible */
     show() {
-        this.container.className = 'visible';
+        this.container.className = 'colorPickerMainContainer visible';
     }
 
     /** Hides the colorPicker */
     hide() {
-        this.container.className = 'hidden';
+        this.container.className = 'colorPickerMainContainer hidden';
     }
 
     /** Equivalent to clicking the `apply` button of the colorPicker */
@@ -239,6 +233,7 @@ class ColorPicker {
         this.rangeB.style.background = `linear-gradient(to right, rgba(${this.R},${this.G},0,${this.A}), rgba(${this.R},${this.G},255,${this.A}))`;
         this.rangeA.style.background = `linear-gradient(to right, rgba(${this.R},${this.G},${this.B},0), rgba(${this.R},${this.G},${this.B},1))`;
         this.drawColor();
+        this.onUpdate();
     }
 
     /** Updates the `R` value for `RGB` notation
@@ -247,7 +242,7 @@ class ColorPicker {
      */
     changeR(r, updateColor = true) {
         this.R = clamp(parseInt(r), 0, 255);
-        document.getElementById('intR').value = r;
+        this.container.querySelector('#intR').value = r;
         this.rangeR.value = r;
         if (!updateColor) return;
         this.toHSV();
@@ -259,6 +254,7 @@ class ColorPicker {
         this.rangeA.style.background = `linear-gradient(to right, rgba(${this.R},${this.G},${this.B},0), rgba(${this.R},${this.G},${this.B},255))`;
         this.colorRect.style.background = `linear-gradient(to top, rgba(0,0,0,${this.A}), transparent), linear-gradient(to right, rgba(255,255,255,${this.A}), hsla(${this.H},100%,50%,${this.A})), url(transparent-bg.png)`;
         this.drawColor();
+        this.onUpdate();
     }
 
     /** Updates the `G` value for `RGB` notation
@@ -267,7 +263,7 @@ class ColorPicker {
      */
     changeG(g, updateColor = true) {
         this.G = clamp(parseInt(g), 0, 255);
-        document.getElementById('intG').value = g;
+        this.container.querySelector('#intG').value = g;
         this.rangeG.value = g;
         if (!updateColor) return;
         this.toHSV();
@@ -279,6 +275,7 @@ class ColorPicker {
         this.rangeA.style.background = `linear-gradient(to right, rgba(${this.R},${this.G},${this.B},0), rgba(${this.R},${this.G},${this.B},255))`;
         this.colorRect.style.background = `linear-gradient(to top, rgba(0,0,0,${this.A}), transparent), linear-gradient(to right, rgba(255,255,255,${this.A}), hsla(${this.H},100%,50%,${this.A})), url(transparent-bg.png)`;
         this.drawColor();
+        this.onUpdate();
     }
 
     /** Updates the `B` value for `RGB` notation
@@ -287,7 +284,7 @@ class ColorPicker {
      */
     changeB(b, updateColor = true) {
         this.B = clamp(parseInt(b), 0, 255);
-        document.getElementById('intB').value = b;
+        this.container.querySelector('#intB').value = b;
         this.rangeB.value = b;
         if (!updateColor) return;
         this.toHSV();
@@ -299,6 +296,7 @@ class ColorPicker {
         this.rangeA.style.background = `linear-gradient(to right, rgba(${this.R},${this.G},${this.B},0), rgba(${this.R},${this.G},${this.B},255))`;
         this.colorRect.style.background = `linear-gradient(to top, rgba(0,0,0,${this.A}), transparent), linear-gradient(to right, rgba(255,255,255,${this.A}), hsla(${this.H},100%,50%,${this.A})), url(transparent-bg.png)`;
         this.drawColor();
+        this.onUpdate();
     }
 
     /** Updates the `A` (transparency) value. Common to all color systems
@@ -307,7 +305,7 @@ class ColorPicker {
      */
     changeA(a, updateColor = true) {
         this.A = clamp(parseFloat(a), 0, 1);
-        document.getElementById('floatA').value = a;
+        this.container.querySelector('#floatA').value = a;
         this.rangeA.value = a
         if (!updateColor) return;
         this.toHSV();
@@ -319,6 +317,7 @@ class ColorPicker {
         this.rangeB.style.background = `linear-gradient(to right, rgba(${this.R},${this.G},0,${this.A}), rgba(${this.R},${this.G},255,${this.A}))`;
         this.colorRect.style.background = `linear-gradient(to top, rgba(0,0,0,${this.A}), transparent), linear-gradient(to right, rgba(255,255,255,${this.A}), hsla(${this.H},100%,50%,${this.A})), url(transparent-bg.png)`;
         this.drawColor();
+        this.onUpdate();
     }
 
     /** Updates the `H` value for both `HSV` and `HSL` notation
@@ -337,6 +336,7 @@ class ColorPicker {
         this.rangeB.style.background = `linear-gradient(to right, rgba(${this.R},${this.G},0,${this.A}), rgba(${this.R},${this.G},255,${this.A}))`;
         this.colorRect.style.background = `linear-gradient(to top, rgba(0,0,0,${this.A}), transparent), linear-gradient(to right, rgba(255,255,255,${this.A}), hsla(${this.H},100%,50%,${this.A})), url(transparent-bg.png)`;
         this.drawColor();
+        this.onUpdate();
     }
 
     /** Updates the `S` value for `HSV` notation (not the same as `HSL` notation)
@@ -350,6 +350,7 @@ class ColorPicker {
         this.toHEX();
         this.toHSL();
         this.drawColor();
+        this.onUpdate();
     }
 
     /** Updates the `V` value for `HSV` notation
@@ -363,6 +364,7 @@ class ColorPicker {
         this.toHEX();
         this.toHSL();
         this.drawColor();
+        this.onUpdate();
     }
 
     /** Updates the `S` value for `HSL` notation (not the same as `HSV` notation)
@@ -376,6 +378,7 @@ class ColorPicker {
         this.toHSV();
         this.toHEX();
         this.drawColor();
+        this.onUpdate();
     }
 
     /** Updates the `L` value for `HSL` notation
@@ -389,6 +392,7 @@ class ColorPicker {
         this.toHSV();
         this.toHEX();
         this.drawColor();
+        this.onUpdate();
     }
 
     // Color conversion methods
@@ -451,8 +455,9 @@ class ColorPicker {
         else if (max == this.B) this.changeH(60 * (this.R - this.G) / (max - min) + 240, false);
         this.changeSv((max == 0) ? 0 : 1 - min / max, false);
         this.changeV(max / 255, false);
-        this.cursor.style.left = `${this.Sv * 400}px`;
-        this.cursor.style.top = `${200 - this.V * 200}px`
+        var o = rect(this.colorRect);
+        this.cursor.style.left = `${this.Sv * o.width}px`;
+        this.cursor.style.top = `${o.height - this.V * o.height}px`
     }
 
     /** Changes `RGB` values by parsing `HSL` values */
@@ -490,18 +495,20 @@ class ColorPicker {
     _applyCallback;
     /** Event fired when the colorPicker's `apply` button has been clicked and its color has been changed
      * @example colorPicker.onApply = () => {
-     *      //code here
+     *      // Code here
      * }
      */
-    onApply(callback) {
-        this._applyCallback = callback;
-    }
+    onApply() { }
 
-    _cancelCallback;
     /** Event fired when the colorPicker's `cancel` button has been clicked and its color has been reverted back to its previous state
      * @example colorPicker.onCancel = someFunction;
      */
-    onCancel(callback) {
-        this._cancelCallback = callback;
-    }
+    onCancel() { }
+
+    /** Event fired when the colorPicker's color has been changed in the page or via code (only if the `updateColor` parameter is set to true when calling a changer method)
+     * @example colorPicker.onUpdate = () => {
+     *      // Code goes here !
+     * };
+     */
+    onUpdate() { }
 }

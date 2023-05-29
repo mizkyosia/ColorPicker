@@ -1,4 +1,4 @@
-#colorPickerMainContainer {
+.colorPickerMainContainer {
     position: fixed;
     top: 0px;
     left: 0px;
@@ -14,18 +14,18 @@
     text-align: center;
     color: white;
     font-family: 'Segoe UI', Tahoma, Geneva, Verdana, sans-serif;
-    background-color: rgba(0, 0, 0, 0.8);
+    background-color: rgba(0, 0, 0, 0.9);
 }
 
-#colorPickerMainContainer.visible {
+.colorPickerMainContainer.visible {
     display: flex;
 }
 
-#colorPickerMainContainer.hidden {
+.colorPickerMainContainer.hidden {
     display: none;
 }
 
-#colorPickerMainContainer #colorPreviewContainer {
+.colorPickerMainContainer #colorPreviewContainer {
     display: flex;
     flex-direction: row;
     border: solid 2px orangered;
@@ -34,32 +34,32 @@
     align-items: center;
 }
 
-#colorPickerMainContainer p {
+.colorPickerMainContainer p {
     margin: 0px;
 }
 
-body:has(#colorPickerMainContainer.visible) {
+body:has(.colorPickerMainContainer.visible) {
     overflow: hidden;
 }
 
-#colorPickerMainContainer #colorSettingsWrapper {
+.colorPickerMainContainer #colorSettingsWrapper {
     display: flex;
     flex-direction: row;
     border:none;
 }
 
-#colorPickerMainContainer #colorPreview {
+.colorPickerMainContainer #colorPreview {
     background-image: url(transparent-bg.png);
 }
 
-#colorPickerMainContainer #colorRect {
+.colorPickerMainContainer #colorRect {
     cursor:pointer;
     width: 400px;
     height: 200px;
     background: linear-gradient(to top, black, transparent), linear-gradient(to right, white, red), url(transparent-bg.png);
 }
 
-#colorPickerMainContainer #colorCursor {
+.colorPickerMainContainer #colorCursor {
     border: 1px solid black;
     border-radius: 25px;
     position: relative;
@@ -74,35 +74,35 @@ body:has(#colorPickerMainContainer.visible) {
     background: url(transparent-bg.png);
 }
 
-#colorPickerMainContainer #colorCopy {
+.colorPickerMainContainer #colorCopy {
     display: flex;
     flex-direction: column;
     align-items: stretch;
     justify-content: center;
 }
 
-#colorPickerMainContainer .colorSystem {
+.colorPickerMainContainer .colorSystem {
     margin: 0px;
     border: solid 2px orangered;
 }
 
-#colorPickerMainContainer .colorSystem>input {
+.colorPickerMainContainer .colorSystem>input {
     width: 100px;
     margin: 2.5px;
 }
 
-#colorPickerMainContainer .colorSystem.grid {
+.colorPickerMainContainer .colorSystem.grid {
     display: grid;
     grid-template-columns: repeat(3, 110px);
 }
 
-#colorPickerMainContainer .colorSystem.flex {
+.colorPickerMainContainer .colorSystem.flex {
     display: flex;
     flex-direction: column;
     align-items: center;
 }
 
-#colorPickerMainContainer #textbox {
+.colorPickerMainContainer #textbox {
     background-color: #FFF;
     color: black;
     margin: 0px;
@@ -114,14 +114,14 @@ body:has(#colorPickerMainContainer.visible) {
     font-size:9pt;
 }
 
-#colorPickerMainContainer #textbox input[type="text"] {
+.colorPickerMainContainer #textbox input[type="text"] {
     margin: 0px;
     height: 100%;
     padding: 0px;
     background-color: #FFF;
 }
 
-#colorPickerMainContainer #hueRange {
+.colorPickerMainContainer #hueRange {
     appearance: none;
     width: 200px;
     margin-top: 85px;
@@ -132,7 +132,7 @@ body:has(#colorPickerMainContainer.visible) {
     background: linear-gradient(to right,hsl(0,100%,50%),hsl(60,100%,50%),hsl(120,100%,50%),hsl(180,100%,50%),hsl(240,100%,50%),hsl(300,100%,50%),hsl(360,100%,50%))
 }
 
-#colorPickerMainContainer .colorRange {
+.colorPickerMainContainer .colorRange {
     border: 1px solid;
     overflow: hidden;
     width: 105px;
@@ -141,42 +141,42 @@ body:has(#colorPickerMainContainer.visible) {
     background-repeat: no-repeat;
 }
 
-#colorPickerMainContainer .colorRange::-webkit-slider-runnable-track {
+.colorPickerMainContainer .colorRange::-webkit-slider-runnable-track {
     width: .5px;
 }
 
-#colorPickerMainContainer .colorRange::-webkit-slider-thumb {
+.colorPickerMainContainer .colorRange::-webkit-slider-thumb {
     background-color: rebeccapurple;
 }
 
-#colorPickerMainContainer #rangeR {
+.colorPickerMainContainer #rangeR {
     border-color: red;
     background: linear-gradient(to right, black, red);
 }
 
-#colorPickerMainContainer #rangeG {
+.colorPickerMainContainer #rangeG {
     border-color: green;
     background: linear-gradient(to right, black, green);
 }
 
-#colorPickerMainContainer #rangeB {
+.colorPickerMainContainer #rangeB {
     border-color: blue;
     background: linear-gradient(to right, black, blue);
 }
 
-#colorPickerMainContainer #rangeA {
+.colorPickerMainContainer #rangeA {
     border: none;
 }
 
-#colorPickerMainContainer #randomColor {
+.colorPickerMainContainer #randomColor {
     background: linear-gradient(to right,hsl(0,100%,50%),hsl(60,100%,50%),hsl(120,100%,50%),hsl(180,100%,50%),hsl(240,100%,50%),hsl(300,100%,50%),hsl(360,100%,50%))
 }
 
-#colorPickerMainContainer .copyColor {
+.colorPickerMainContainer .copyColor {
     margin: 2.5px;
 }
 
-#colorPickerMainContainer #buttonsWrapper {
+.colorPickerMainContainer #buttonsWrapper {
     display: flex;
     flex-direction: row;
     margin: 10px;
@@ -184,7 +184,7 @@ body:has(#colorPickerMainContainer.visible) {
     justify-content: center;
 }
 
-#colorPickerMainContainer .actionButton {
+.colorPickerMainContainer .actionButton {
     width: 11rem;
     margin: 10px;
     font-size: 1.25rem;
