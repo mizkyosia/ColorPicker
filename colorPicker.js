@@ -61,7 +61,7 @@ class ColorPicker {
     constructor() {
         while (document.getElementById(`colorPickerMainContainer${0}`)) this.ID++;
         const xhr = new XMLHttpRequest();
-        xhr.open("GET", "/colorPicker.html", true);
+        xhr.open("GET", "./colorPicker.html", true);
         xhr.responseType = "text";
         xhr.onload = () => {
             if (xhr.readyState === xhr.DONE && xhr.status === 200) {
